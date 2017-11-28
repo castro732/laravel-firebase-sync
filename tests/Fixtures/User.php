@@ -1,12 +1,14 @@
 <?php
 
-namespace Mpociot\Firebase\Tests\Fixtures;
+namespace Castro732\Firebase\Tests\Fixtures;
 
 use Illuminate\Database\Eloquent\Model;
-use Mpociot\Firebase\SyncsWithFirebase;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Castro732\Firebase\SyncsWithFirebase;
 
 class User extends Model
 {
-
-    use SyncsWithFirebase;
+	use SoftDeletes;
+	use SyncsWithFirebase;
 }

@@ -19,7 +19,7 @@
     </php>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Mpociot/</directory>
+            <directory suffix=".php">src/Castro732/</directory>
         </whitelist>
     </filter>
 </phpunit>

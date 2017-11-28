@@ -1,9 +1,9 @@
 <?php
 
-namespace Mpociot\Firebase;
+namespace Castro732\Firebase;
 
-use Firebase\FirebaseInterface;
-use Firebase\FirebaseLib;
+use Kreait\Firebase\Factory;
+use Kreait\Firebase\ServiceAccount;
 
 /**
  * Class SyncsWithFirebase
@@ -39,8 +39,14 @@ trait SyncsWithFirebase
     /**
      * @param FirebaseInterface|null $firebaseClient
      */
-    public function setFirebaseClient($firebaseClient)
+    public function setFirebaseClient()
     {
+        $serviceAccount = ServiceAccount::fromJsonFile((__DIR__.'/firebase.json'));
+        $apiKey = env('FIREBASE_API_KEY');
+        $firebaseClient = (new Factory)
+                    ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
+                    ->withDatabaseUri(env('FIREBASE_DATABASE_URL'))
+                    ->create();
         $this->firebaseClient = $firebaseClient;
     }
 
@@ -61,14 +67,15 @@ trait SyncsWithFirebase
     protected function saveToFirebase($mode)
     {
         if (is_null($this->firebaseClient)) {
-            $this->firebaseClient = new FirebaseLib(config('services.firebase.database_url'), config('services.firebase.secret'));
+            $this->setFirebaseClient();
         }
+
         $path = $this->getTable() . '/' . $this->getKey();
 
-        if ($mode === 'set') {
-            $this->firebaseClient->set($path, $this->getFirebaseSyncData());
-        } elseif ($mode === 'update') {
-            $this->firebaseClient->update($path, $this->getFirebaseSyncData());
+        if ($mode === 'set' && $fresh = $this->fresh()) {
+            $this->firebaseClient->set($path, $fresh->toArray());
+        } elseif ($mode === 'update' && $fresh = $this->fresh()) {
+            $this->firebaseClient->getDatabase()->getReference($path)->update($fresh->toArray());
         } elseif ($mode === 'delete') {
             $this->firebaseClient->delete($path);
         }

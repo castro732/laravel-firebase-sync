@@ -1,7 +1,7 @@
 <?php
 
 use Mockery as m;
-use Mpociot\Firebase\Tests\Fixtures\User;
+use Castro732\Firebase\Tests\Fixtures\User;
 
 class FirebaseSyncTest extends Orchestra\Testbench\TestCase
 {
@@ -25,7 +25,8 @@ class FirebaseSyncTest extends Orchestra\Testbench\TestCase
 
     public function test_sync_requires_valid_settings()
     {
-        $this->setExpectedException(ErrorException::class, 'You must provide a baseURI variable.');
+        $this->expectException(InvalidArgumentException::class, 'C:\Users\Jose\Git\laravel-firebase-synchronization\src\Castro\Firebase/firebase.json does not exist.');
+        // $this->setExpectedException(ErrorException::class, 'You must provide a baseURI variable.');
 
         $user = new User();
         $user->name = 'Foo';
