@@ -31,9 +31,11 @@ trait SyncsWithFirebase
         static::deleted(function ($model) {
             $model->saveToFirebase('delete');
         });
-        static::restored(function ($model) {
-            $model->saveToFirebase('set');
-        });
+        if (trait_exists('SoftDeletes')) {
+	        static::restored(function ($model) {
+	            $model->saveToFirebase('set');
+	        });
+        }
     }
 
     /**
