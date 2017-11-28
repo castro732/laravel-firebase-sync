@@ -43,7 +43,7 @@ trait SyncsWithFirebase
      */
     public function setFirebaseClient()
     {
-        $serviceAccount = ServiceAccount::fromJsonFile((__DIR__.'/firebase.json'));
+        $serviceAccount = ServiceAccount::fromJsonFile(env('FIREBASE_JSON_DIR'));
         $apiKey = env('FIREBASE_API_KEY');
         $firebaseClient = (new Factory)
                     ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
