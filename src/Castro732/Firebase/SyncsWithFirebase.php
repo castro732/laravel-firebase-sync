@@ -7,7 +7,6 @@ use Kreait\Firebase\ServiceAccount;
 
 /**
  * Class SyncsWithFirebase
- * @package App\Traits
  */
 trait SyncsWithFirebase
 {
@@ -18,7 +17,7 @@ trait SyncsWithFirebase
     protected $firebaseClient;
 
     /**
-     * Boot the trait and add the model events to synchronize with firebase
+     * Boot the trait and add the model events to synchronize with firebase.
      */
     public static function bootSyncsWithFirebase()
     {
@@ -43,11 +42,11 @@ trait SyncsWithFirebase
      */
     public function setFirebaseClient()
     {
-        $serviceAccount = ServiceAccount::fromJsonFile(env('FIREBASE_JSON_DIR'));
-        $apiKey = env('FIREBASE_API_KEY');
+        $serviceAccount = ServiceAccount::fromJsonFile(config('services.firebase.json_dir'));
+        $apiKey = config('services.firebase.api_key');
         $firebaseClient = (new Factory)
                     ->withServiceAccountAndApiKey($serviceAccount, $apiKey)
-                    ->withDatabaseUri(env('FIREBASE_DATABASE_URL'))
+                    ->withDatabaseUri(config('services.firebase.database_url'))
                     ->create();
         $this->firebaseClient = $firebaseClient;
     }
