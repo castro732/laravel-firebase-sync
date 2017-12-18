@@ -74,7 +74,7 @@ trait SyncsWithFirebase
         $path = $this->getTable() . '/' . $this->getKey();
 
         if ($mode === 'set' && $fresh = $this->fresh()) {
-            $this->firebaseClient->set($path, $fresh->toArray());
+            $this->firebaseClient->getDatabase()->getReference($path)->set($fresh->toArray());
         } elseif ($mode === 'update' && $fresh = $this->fresh()) {
             $this->firebaseClient->getDatabase()->getReference($path)->update($fresh->toArray());
         } elseif ($mode === 'delete') {
